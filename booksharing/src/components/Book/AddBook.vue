@@ -64,26 +64,32 @@ export default {
   },
   methods: {
     async add() {
-      const formData = {
-        title: this.title,
-        author: this.author,
-        img: this.img,
-        short_description: this.short_descrtiption,
-        genre: this.genre,
-        owners: [
-          {
-            name: this.$store.state.auth.userData.name
-          }
-        ]
-      };
-      try {
-        await this.$store.dispatch("addBook", formData);
-        this.book = false;
-        this.$store.state.book.books = [];
-        await this.$store.dispatch("getBooks");
-        this.$emit("getBook");
-      } catch (error) {
-        throw error;
+      if (this.title != "") {
+        if (this.img == "") {
+          this.img =
+            "https://sun9-53.userapi.com/c857536/v857536112/16625a/0oXBhY2fG38.jpg";
+        }
+        const formData = {
+          title: this.title,
+          author: this.author,
+          img: this.img,
+          short_description: this.short_descrtiption,
+          genre: this.genre,
+          owners: [
+            {
+              name: this.$store.state.auth.userData.name
+            }
+          ]
+        };
+        try {
+          await this.$store.dispatch("addBook", formData);
+          this.book = false;
+          this.$store.state.book.books = [];
+          await this.$store.dispatch("getBooks");
+          this.$emit("getBook");
+        } catch (error) {
+          throw error;
+        }
       }
     },
     cancel() {

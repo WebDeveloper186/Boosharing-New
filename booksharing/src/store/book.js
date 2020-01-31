@@ -47,7 +47,6 @@ export default {
     },
     mutations: {
         setBooks(state, payload) {
-            console.log(payload)
             const length = Object.keys(payload).length
             for (var i = 0; i < length; i++) {
                 const name = Object.keys(payload)[i]

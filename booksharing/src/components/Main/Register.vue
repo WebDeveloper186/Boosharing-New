@@ -1,8 +1,8 @@
 <template>
   <v-menu v-model="register" :close-on-content-click="false" max-width="350">
     <template v-slot:activator="{ on }">
-      <v-btn class="ma-2" tile text v-on="on">
-        <v-icon left>perm_identity</v-icon>Регистрация
+      <v-btn class="reg" tile text v-on="on">
+        <v-icon left>person_add</v-icon>
       </v-btn>
     </template>
 
@@ -71,8 +71,7 @@
       </v-card-actions>
     </v-card>
   </v-menu>
-</template
->
+</template>
 
 <script>
 import MaskedInput from "vue-masked-input";
@@ -169,5 +168,17 @@ export default {
   width: 100%;
   color: lightgray;
   height: 2.25em;
+}
+.reg::after {
+  content: "Регистрация";
+}
+@media screen and (max-width: 458px) {
+  .reg {
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+  }
+  .reg::after {
+    content: "";
+  }
 }
 </style>

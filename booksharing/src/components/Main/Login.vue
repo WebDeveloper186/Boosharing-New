@@ -1,8 +1,8 @@
 <template>
   <v-menu v-model="login" :close-on-content-click="false" max-width="350">
     <template v-slot:activator="{ on }">
-      <v-btn class="ma-2" tile text v-on="on">
-        <v-icon left>exit_to_app</v-icon>Авторизация
+      <v-btn class="login" tile text v-on="on">
+        <v-icon left>exit_to_app</v-icon>
       </v-btn>
     </template>
 
@@ -21,7 +21,11 @@
                 <v-text-field v-model="email" label="E-mail"></v-text-field>
               </v-col>
               <v-col cols="12" md="12">
-                <v-text-field type="password" v-model="password" label="Пароль"></v-text-field>
+                <v-text-field
+                  type="password"
+                  v-model="password"
+                  label="Пароль"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -62,7 +66,6 @@ export default {
       try {
         await this.$store.dispatch("login", formData);
         this.user_data = this.$store.getters.getUData;
-        this.$router.push("/user");
       } catch (error) {
         throw error;
       } finally {
@@ -82,4 +85,17 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.login::after {
+  content: "Авторизация";
+}
+@media screen and (max-width: 458px) {
+  .login {
+    margin-left: -5px !important;
+    margin-right: -15px !important;
+  }
+  .login::after {
+    content: "";
+  }
+}
+</style>

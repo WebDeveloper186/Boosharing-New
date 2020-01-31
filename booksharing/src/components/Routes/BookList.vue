@@ -1,10 +1,26 @@
 <template>
   <v-container>
     <v-row>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn color="purple" large v-on="on" class="scroll" @click="scroll">
+            <v-icon>arrow_upward</v-icon>
+          </v-btn>
+        </template>
+        <span>Наверх</span>
+      </v-tooltip>
       <v-col cols="12">
         <v-row>
-          <v-btn large @click="$router.go()">Весь список книг</v-btn>
+          <v-btn
+            @click="refresh"
+            text
+            style="margin-top: .75em;"
+            class="refresh"
+          >
+            <v-icon class="pr-2">refresh</v-icon>
+          </v-btn>
           <v-text-field
+            id="top"
             v-model="search"
             label="Поиск книги по названию"
             outlined
@@ -12,7 +28,14 @@
           ></v-text-field>
         </v-row>
       </v-col>
-      <v-col cols="12" md="6" sm="6" lg="4" v-for="book in filteredBook" :key="book.name">
+      <v-col
+        cols="12"
+        md="6"
+        sm="6"
+        lg="4"
+        v-for="book in filteredBook"
+        :key="book.name"
+      >
         <v-card
           class="mx-auto"
           :flat="flat"
@@ -20,7 +43,7 @@
           :raised="raised"
           :width="width"
           :height="height"
-          style="border-radius: 10px"
+          style="border-radius: 5px"
         >
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -32,12 +55,15 @@
                 @click="gen_url(book.name)"
               ></v-img>
             </template>
-            <span>{{book.name}}</span>
+            <span>{{ book.name }}</span>
           </v-tooltip>
         </v-card>
       </v-col>
       <v-col cols="12">
-        <AddBook v-if="this.$store.state.auth.userData.name !== undefined" @getBook="getNewBooks" />
+        <AddBook
+          v-if="this.$store.state.auth.userData.name !== undefined"
+          @getBook="getNewBooks"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -56,6 +82,7 @@ export default {
   },
   data() {
     return {
+      disable: true,
       translit: "",
       search: "",
       books: undefined,
@@ -73,6 +100,7 @@ export default {
     await this.$store.dispatch("getBooks");
     this.books = this.$store.getters.getBooks;
     if (Object.keys(this.$route.query) == "genre") {
+      this.disable = false;
       if (this.books === null || this.books === undefined) return null;
       this.books = this.books.filter(book => {
         return book.data.genre
@@ -81,17 +109,13 @@ export default {
       });
     }
     if (Object.keys(this.$route.query) == "author") {
+      this.disable = false;
       if (this.books === null || this.books === undefined) return null;
       this.books = this.books.filter(book => {
         return book.data.author
           .toLowerCase()
           .includes(this.$route.query.author.toLowerCase());
       });
-    }
-  },
-  watch: {
-    search() {
-      console.log(this.search);
     }
   },
   computed: {
@@ -103,6 +127,11 @@ export default {
     }
   },
   methods: {
+    scroll() {
+      document.querySelector("#top").scrollIntoView({
+        behavior: "smooth"
+      });
+    },
     gen_url(name) {
       const chars = {
         а: "a",
@@ -167,7 +196,48 @@ export default {
     },
     getNewBooks() {
       this.$router.go();
+    },
+    refresh() {
+      if (this.disable != true) {
+        this.$router.replace({ query: null });
+      }
+      this.$router.go();
     }
   }
 };
 </script>
+
+<style scoped>
+.refresh::after {
+  content: "Обновить книги";
+}
+html {
+  scroll-behavior: smooth;
+}
+.scroll {
+  z-index: 99;
+  position: fixed;
+  bottom: 1%;
+  left: 3%;
+}
+.scroll i {
+  font-size: 3em;
+}
+@media screen and (max-width: 400px) {
+  .scroll {
+    left: 0;
+    bottom: 0;
+  }
+  .scroll i {
+    font-size: 2.65em;
+  }
+  .refresh::after {
+    content: "";
+  }
+}
+@media (min-width: 1600px) {
+  .scroll {
+    left: 0;
+  }
+}
+</style>

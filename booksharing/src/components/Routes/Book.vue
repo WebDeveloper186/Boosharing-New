@@ -33,41 +33,41 @@
               <p>
                 <b style="text-transform: uppercase">Автор:</b>
                 <v-chip
-                  color="green"
+                  color="#C8E7A1"
                   :outlined="true"
                   small
                   style="margin-bottom: 5px;"
                   @click="$router.push(`/books?author=${books[0].data.author}`)"
                 >
-                  <v-icon left>mdi-account-outline</v-icon>
+                  <v-icon left>create</v-icon>
                   {{books[0].data.author}}
                 </v-chip>
               </p>
               <p>
-                <b style="text-transform: uppercase">Владельцы:</b>
+                <b style="text-transform: uppercase">Владелец:</b>
                 <v-chip
                   v-for="owner in books[0].data.owners"
                   :key="owner.name"
-                  color="purple"
+                  color="#B584E0"
                   :outlined="true"
                   pill
                   small
                   style="margin-bottom:10px !important; cursor:pointer"
                 >
-                  <v-icon left>mdi-account-outline</v-icon>
+                  <v-icon left>mdi-account</v-icon>
                   {{owner.name}}
                 </v-chip>
               </p>
               <p>
                 Жанр:
                 <v-chip
-                  color="primary"
+                  color="#89DAFF"
                   :outlined="true"
                   small
                   style="margin-bottom: 5px;"
                   @click="$router.push(`/books?genre=${books[0].data.genre}`)"
                 >
-                  <v-icon left>mdi-account-outline</v-icon>
+                  <v-icon left>import_contacts</v-icon>
                   {{books[0].data.genre}}
                 </v-chip>
               </p>
