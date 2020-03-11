@@ -1,60 +1,49 @@
 <template>
   <v-row justify="center">
-    <v-menu v-model="book" :close-on-content-click="false" max-width="500">
-      <template v-slot:activator="{ on }">
-        <v-btn color="purple" class="ma-2" large v-on="on">Добавить книгу</v-btn>
-      </template>
+    <v-btn class="login" tile color="purple" @click="show">
+      <v-icon left>book</v-icon>Добавить книгу
+    </v-btn>
+    <modal name="demo-login" transition="pop-out" :width="modalWidth" :height="550">
+      <div class="box">
+        <div class="box-part" id="bp-left">
+          <div class="partition" id="partition-register">
+            <div class="partition-title">Новая книга</div>
+            <div class="partition-form">
+              <v-text-field v-model="title" label="Название книги"></v-text-field>
+              <v-text-field v-model="author" label="Автор"></v-text-field>
+              <v-text-field v-model="genre" label="Жанр"></v-text-field>
+              <v-text-field v-model="img" label="Ссылка на обложку"></v-text-field>
+              <v-textarea
+                outlined
+                no-resize
+                height="125"
+                :counter="1550"
+                v-model="short_descrtiption"
+                label="Краткое описание"
+              ></v-textarea>
 
-      <v-col cols="12" md="10" lg="12" sm="6">
-        <v-card>
-          <v-list>
-            <v-list-item class="ml-4">Добавление книги</v-list-item>
-          </v-list>
-
-          <v-divider></v-divider>
-
-          <v-list>
-            <v-list-item>
-              <v-container>
+              <div class="button-set">
                 <v-row>
-                  <v-col cols="12" md="12">
-                    <v-text-field v-model="title" label="Навзвание книги"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="12">
-                    <v-text-field v-model="author" label="Автор книги"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="12">
-                    <v-text-field v-model="genre" label="Основной жанр книги"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="12">
-                    <v-text-field v-model="img" label="Ссылка на обложку книги"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="12">
-                    <v-text-field v-model="short_descrtiption" label="Краткое описание"></v-text-field>
-                  </v-col>
+                  <v-btn class="first_btn" :disabled="disabled" @click="add">Добавить</v-btn>
+                  <v-btn class="second_btn" @click="cancel">Отменить</v-btn>
                 </v-row>
-              </v-container>
-            </v-list-item>
-          </v-list>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn text @click="book = !book">Отмена</v-btn>
-            <v-btn color="purple" text @click="add">Добавить</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="box-part" id="bp-right"></div>
+      </div>
+    </modal>
   </v-row>
 </template>
 
 <script>
 /*eslint-disable*/
+const MODAL_WIDTH = 656;
 export default {
   data() {
     return {
-      book: false,
+      modalWidth: MODAL_WIDTH,
       title: "",
       author: "",
       genre: "",
@@ -62,34 +51,53 @@ export default {
       short_descrtiption: ""
     };
   },
+  computed: {
+    disabled: function() {
+      if (
+        this.title == "" ||
+        this.author == "" ||
+        this.short_descrtiption == "" ||
+        this.short_descrtiption.length > 1550 ||
+        this.genre == ""
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  created() {
+    this.modalWidth =
+      window.innerWidth < MODAL_WIDTH ? MODAL_WIDTH / 2 : MODAL_WIDTH;
+  },
   methods: {
+    show() {
+      this.$modal.show("demo-login");
+    },
     async add() {
-      if (this.title != "") {
-        if (this.img == "") {
-          this.img =
-            "https://sun9-53.userapi.com/c857536/v857536112/16625a/0oXBhY2fG38.jpg";
-        }
-        const formData = {
-          title: this.title,
-          author: this.author,
-          img: this.img,
-          short_description: this.short_descrtiption,
-          genre: this.genre,
-          owners: [
-            {
-              name: this.$store.state.auth.userData.name
-            }
-          ]
-        };
-        try {
-          await this.$store.dispatch("addBook", formData);
-          this.book = false;
-          this.$store.state.book.books = [];
-          await this.$store.dispatch("getBooks");
-          this.$emit("getBook");
-        } catch (error) {
-          throw error;
-        }
+      if (this.img == "") {
+        this.img =
+          "https://sun9-63.userapi.com/c857536/v857536112/16621e/djI7yAEolLg.jpg";
+      }
+      const formData = {
+        title: this.title,
+        author: this.author,
+        img: this.img,
+        short_description: this.short_descrtiption,
+        genre: this.genre,
+        owners: [
+          {
+            name: this.$store.state.auth.userData.name
+          }
+        ]
+      };
+      try {
+        await this.$store.dispatch("addBook", formData);
+        this.$store.state.book.books = [];
+        await this.$store.dispatch("getBooks");
+        this.$emit("getBook");
+      } catch (error) {
+        throw error;
       }
     },
     cancel() {
@@ -98,11 +106,84 @@ export default {
       this.genre = "";
       this.img = "";
       this.short_descrtiption = "";
-      this.book = !this.book;
+      this.$modal.hide("demo-login");
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
+.box {
+  background: $bg-modal;
+  overflow: hidden;
+  @include width-and-height(660px, 550px);
+  border-radius: 2px;
+  box-sizing: border-box;
+  box-shadow: 0 0 40px black;
+  font-size: 0;
+  .box-part {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    box-sizing: border-box;
+    @include width-and-height(50%, 100%);
+    &#bp-right {
+      background: url("https://vnnews.ru/images/wsscontent/articles/2015/12/semya-mitinykh-dlya-nas-kniga-eto-svyatoe.jpg")
+        no-repeat center;
+      border-left: 1px solid #eee;
+    }
+  }
+  .partition {
+    @include width-and-height(100%, 100%);
+    .partition-title {
+      box-sizing: border-box;
+      padding: 10px;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 1px;
+      font-size: 20px;
+      font-weight: 300;
+    }
+    .partition-form {
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .button-set {
+      margin-left: 15px;
+      .first_btn {
+        color: white;
+        width: 45%;
+        background-color: $main-color !important;
+        border-color: $main-color !important;
+      }
+      .second_btn {
+        color: white;
+        width: 45%;
+        margin-left: 5%;
+        background-color: $second-color !important;
+        border-color: $second-color !important;
+      }
+    }
+  }
+  button {
+    border-radius: 10px;
+    font-family: "Open Sans", sans-serif;
+    margin-top: 8px;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+.pop-out-enter-active,
+.pop-out-leave-active {
+  transition: all 0.5s;
+}
+.pop-out-enter,
+.pop-out-leave-active {
+  opacity: 0;
+  transform: translateY(24px);
+}
 </style>

@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import UserCard from "@/components/User/UserCard";
-
 export default {
   metaInfo() {
     return {
@@ -14,7 +12,7 @@ export default {
     };
   },
   components: {
-    UserCard
+    UserCard: () => import("@/components/User/UserCard")
   },
   created() {
     const uData = this.$store.getters.getUData;
@@ -28,9 +26,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
 .row {
-  padding: 0;
-  margin: 0;
+  @include reset-padding-margin;
 }
 </style>

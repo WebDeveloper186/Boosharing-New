@@ -2,11 +2,15 @@ import firebase from 'firebase'
 /* eslint-disable*/
 export default {
     state: {
-        books: []
+        books: [],
+        currentBook: undefined
     },
     getters: {
-        getBooks: s => {
-            return s.books
+        getBooks: state => {
+            return state.books
+        },
+        getCurrentBook: state => {
+            return state.currentBook
         }
     },
     actions: {
@@ -43,6 +47,12 @@ export default {
             } catch (error) {
                 throw error
             }
+        },
+        currentBook({
+            dispatch,
+            commit
+        }, book) {
+            commit("setCurrentBook", book)
         }
     },
     mutations: {
@@ -56,6 +66,9 @@ export default {
                 }
                 state.books.push(data)
             }
+        },
+        setCurrentBook(state, data) {
+            state.currentBook = data
         }
     }
 }

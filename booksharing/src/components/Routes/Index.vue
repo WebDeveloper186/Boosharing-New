@@ -1,16 +1,9 @@
 <template>
   <v-col>
-    <section style="margin: -12px;">
-      <v-parallax
-        src="https://images.wallpaperscraft.ru/image/svetilniki_knigi_biblioteka_73969_1920x1080.jpg"
-        height="600"
-      >
+    <section class="first_paralax">
+      <v-parallax src="paralax.jpg" height="600">
         <v-layout column align-center justify-center class="white--text">
-          <img
-            src="https://psv4.userapi.com/c856532/u253906204/docs/d1/b93c12bdf205/Books_are_shared.png?extra=51W8EkGGLHcZIo6wsYPbByMoC1vMPtHTRb5_9CKCBrnXsJlIhiSLPD1Bf1GFK07AVo2sBl9HY2XhqHqYOq7DGJDrYdcdK1KDqfNxgGX8apMuLSitc8Bu3B-BGEWfAGR695ONnzcarcv21PDx5Sw1Wn8-"
-            alt="Books are shared"
-            height="200"
-          />
+          <img src="Books_are_shared.webp" alt="Books are shared" height="200" />
           <h1 class="white--text mb-2 display-1 text-center">Booksharing</h1>
           <div class="subheading mb-4 text-center">Developed by xX_flex_Xx</div>
         </v-layout>
@@ -30,7 +23,7 @@
               <v-flex xs12 md4>
                 <v-card flat class="transparent">
                   <v-card-text class="text-center">
-                    <v-icon x-large class="blue--text text--lighten-2">book</v-icon>
+                    <v-icon x-large class="icons">book</v-icon>
                   </v-card-text>
                   <v-card-title primary-title class="layout justify-center">
                     <div class="headline text-center">Обширный список книг</div>
@@ -45,7 +38,7 @@
               <v-flex xs12 md4>
                 <v-card flat class="transparent">
                   <v-card-text class="text-center">
-                    <v-icon x-large class="blue--text text--lighten-2">speed</v-icon>
+                    <v-icon x-large class="icons">speed</v-icon>
                   </v-card-text>
                   <v-card-title primary-title class="layout justify-center">
                     <div class="headline">Быстрое получение книги</div>
@@ -60,7 +53,7 @@
               <v-flex xs12 md4>
                 <v-card flat class="transparent">
                   <v-card-text class="text-center">
-                    <v-icon x-large class="blue--text text--lighten-2">people</v-icon>
+                    <v-icon x-large class="icons">people</v-icon>
                   </v-card-text>
                   <v-card-title primary-title class="layout justify-center">
                     <div class="headline text-center">Обширное сообщество</div>
@@ -78,7 +71,7 @@
       </v-layout>
     </section>
 
-    <section style="margin-left: -12px; margin-right: -12px">
+    <section class="second_paralax">
       <v-lazy
         v-model="paralax"
         :options="{
@@ -87,18 +80,14 @@
         min-height="200"
         transition="fade-transition"
       >
-        <v-parallax
-          src="https://images.wallpaperscraft.ru/image/svetilniki_knigi_biblioteka_73969_1920x1080.jpg"
-          height="380"
-        >
+        <v-parallax src="paralax.jpg" height="380">
           <v-layout column align-center justify-center>
             <div
               class="headline white--text mb-4 text-center"
             >Получить желаемую книгу легче, чем ты думаешь</div>
             <em>Начни пользоватся приложением уже сегодня</em>
             <v-btn
-              class="mt-12"
-              color="blue lighten-2"
+              class="mt-12 btn_book"
               dark
               large
               @click="$router.push('books')"
@@ -131,7 +120,7 @@
                 </v-card-text>
               </v-card>
             </v-flex>
-            <v-flex xs12 sm4 offset-sm1>
+            <v-flex xs12 sm4 offset-sm1 class="contacts">
               <v-card flat class="transparent">
                 <v-card-title primary-title class="layout justify-center">
                   <div class="headline">Наши контакты</div>
@@ -139,7 +128,7 @@
                 <v-list class="transparent">
                   <v-list-item>
                     <v-list-item-action>
-                      <v-icon class="blue--text text--lighten-2">mdi-phone</v-icon>
+                      <v-icon class="icons">mdi-phone</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                       <v-list-item-title>8(800)555-35-35</v-list-item-title>
@@ -147,7 +136,7 @@
                   </v-list-item>
                   <v-list-item>
                     <v-list-item-action>
-                      <v-icon class="blue--text text--lighten-2">mdi-map-marker</v-icon>
+                      <v-icon class="icons">mdi-map-marker</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                       <v-list-item-title>Сургут, Россия</v-list-item-title>
@@ -155,7 +144,7 @@
                   </v-list-item>
                   <v-list-item>
                     <v-list-item-action>
-                      <v-icon class="blue--text text--lighten-2">mdi-email</v-icon>
+                      <v-icon class="icons">mdi-email</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                       <v-list-item-title>xX_flex_Xx@gmail.com</v-list-item-title>
@@ -172,6 +161,7 @@
 </template>
 
 <script>
+/*eslint-disable*/
 export default {
   metaInfo() {
     return {
@@ -186,3 +176,22 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
+.first_paralax {
+  margin: -12px;
+}
+.second_paralax {
+  margin-left: -12px;
+  margin-right: -12px;
+}
+.icons {
+  color: $main-color;
+}
+.btn_book {
+  background-color: $second-color !important;
+}
+</style>

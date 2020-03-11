@@ -9,8 +9,8 @@ export default {
         }
     },
     getters: {
-        getUData: s => {
-            return s.userData
+        getUData: state => {
+            return state.userData
         }
     },
     actions: {

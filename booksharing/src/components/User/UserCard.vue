@@ -26,27 +26,27 @@ export default {
 };
 </script>
 
-<style scoped>
-@media screen and (max-width: 350px) {
-  .mobile-img {
-    width: 300px;
-  }
-}
-@media screen and (max-width: 400px) {
-  .mobile-img {
-    width: 350px;
-  }
-}
-@media screen and (max-width: 450px) {
-  .mobile-img {
-    width: 400px;
-  }
-  .mobile {
-    widows: 400px;
-  }
-}
+<style scoped lang="scss">
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
 .row {
-  padding: 0;
-  margin: 0;
+  @include reset-padding-margin;
+}
+.mobile {
+  .mobile-img {
+    @media screen and (max-width: 350px) {
+      width: 200px;
+    }
+    @media screen and (max-width: 400px) {
+      width: 350px;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    width: 400px;
+    & .mobile-img {
+      width: 400px;
+    }
+  }
 }
 </style>

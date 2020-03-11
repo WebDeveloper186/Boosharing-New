@@ -5,8 +5,6 @@ import Meta from "vue-meta";
 Vue.use(Router);
 Vue.use(Meta);
 
-/* eslint-disable*/
-
 export default new Router({
   mode: "history",
   routes: [{
@@ -16,8 +14,7 @@ export default new Router({
     {
       path: "/books",
       component: () => import("@/components/Routes/BookList")
-    },
-    {
+    }, {
       path: "/user",
       component: () => import("@/components/Routes/User")
     },
@@ -31,6 +28,10 @@ export default new Router({
           next();
         }
       }
+    },
+    {
+      path: "*",
+      component: () => import("@/components/Routes/NotFound")
     }
   ]
 });

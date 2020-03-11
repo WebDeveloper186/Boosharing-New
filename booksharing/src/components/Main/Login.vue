@@ -1,60 +1,58 @@
-<template>
-  <v-menu v-model="login" :close-on-content-click="false" max-width="350">
-    <template v-slot:activator="{ on }">
-      <v-btn class="login" tile text v-on="on">
-        <v-icon left>exit_to_app</v-icon>
-      </v-btn>
-    </template>
+<template
+  >
+  <v-row>
+    <v-btn class="login" tile text @click="show">
+      <v-icon left>exit_to_app</v-icon>
+    </v-btn>
+    <modal name="demo-login" transition="pop-out" :width="modalWidth" :height="400">
+      <div class="box">
+        <div class="box-part" id="bp-left">
+          <div class="partition" id="partition-register">
+            <div class="partition-title">Вход на сайт</div>
+            <div class="partition-form">
+              <v-text-field v-model="email" label="Email" class="email"></v-text-field>
+              <v-text-field v-model="password" label="Пароль" type="password"></v-text-field>
 
-    <v-card>
-      <v-list>
-        <v-list-item>Форма авторизации</v-list-item>
-      </v-list>
+              <div class="margin-top"></div>
 
-      <v-divider></v-divider>
-
-      <v-list>
-        <v-list-item>
-          <v-container>
-            <v-row>
-              <v-col cols="12" md="12">
-                <v-text-field v-model="email" label="E-mail"></v-text-field>
-              </v-col>
-              <v-col cols="12" md="12">
-                <v-text-field
-                  type="password"
-                  v-model="password"
-                  label="Пароль"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-list-item>
-      </v-list>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-
-        <v-btn text @click="login = false">Отмена</v-btn>
-        <v-btn color="primary" text @click="submit">Войти</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-menu>
+              <v-btn large color="purple" width="100%" @click="submit">Войти</v-btn>
+              <v-btn large color="info" width="100%" @click="$modal.hide('demo-login')">Отменить</v-btn>
+            </div>
+          </div>
+        </div>
+        <div class="box-part" id="bp-right"></div>
+      </div>
+    </modal>
+  </v-row>
 </template>
 
 <script>
+const MODAL_WIDTH = 656;
+
 export default {
   data() {
     return {
-      loading: false,
-      login: false,
+      modalWidth: MODAL_WIDTH,
       email: "",
-      password: "",
-      user_data: undefined
+      password: ""
     };
   },
-  /* eslint-disable*/
+  created() {
+    this.modalWidth =
+      window.innerWidth < MODAL_WIDTH ? MODAL_WIDTH / 2 : MODAL_WIDTH;
+  },
+  watch: {
+    email() {
+      this.email = this.email.replace(" ", "");
+    },
+    password() {
+      this.password = this.password.replace(" ", "");
+    }
+  },
   methods: {
+    show() {
+      this.$modal.show("demo-login");
+    },
     async submit() {
       this.loading = true;
       this.$root.$emit("loading", this.loading);
@@ -85,17 +83,79 @@ export default {
 };
 </script>
 
-<style scoped>
-.login::after {
-  content: "Авторизация";
-}
-@media screen and (max-width: 458px) {
-  .login {
+<style scoped lang="scss">
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
+.login {
+  &::after {
+    content: "Авторизация";
+  }
+  @media screen and (max-width: 458px) {
     margin-left: -5px !important;
     margin-right: -15px !important;
+    &::after {
+      content: "";
+    }
   }
-  .login::after {
-    content: "";
+}
+.box {
+  background: $bg-modal;
+  overflow: hidden;
+  @include width-and-height(656px, 400px);
+  border-radius: 2px;
+  box-sizing: border-box;
+  box-shadow: 0 0 40px black;
+  font-size: 0;
+  .box-part {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    box-sizing: border-box;
+    @include width-and-height(50%, 100%);
+    &#bp-right {
+      background: url("https://static.make.ua/catalog/09/printmaking-0000033__1366093018__615.jpg")
+        no-repeat center;
+      border-left: 1px solid white;
+    }
   }
+  .partition {
+    @include width-and-height(100%, 100%);
+    .partition-title {
+      box-sizing: border-box;
+      padding: 30px;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 1px;
+      font-size: 20px;
+      font-weight: 300;
+    }
+    .partition-form {
+      padding: 0 20px;
+      box-sizing: border-box;
+      .email {
+        margin-bottom: 20px;
+      }
+      .margin-top {
+        margin-top: 60px;
+      }
+    }
+  }
+  button {
+    margin-top: 8px;
+    border-radius: 10px;
+    font-family: "Open Sans", sans-serif;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+}
+.pop-out-enter-active,
+.pop-out-leave-active {
+  transition: all 0.5s;
+}
+.pop-out-enter,
+.pop-out-leave-active {
+  opacity: 0;
+  transform: translateY(24px);
 }
 </style>

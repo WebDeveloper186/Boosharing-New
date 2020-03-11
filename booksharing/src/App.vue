@@ -2,8 +2,8 @@
   <v-app>
     <v-container class="fill-height" fluid v-if="load">
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="3" lg="2"
-          ><atom-spinner
+        <v-col cols="12" sm="8" md="3" lg="2">
+          <atom-spinner
             :animation-duration="1000"
             :size="300"
             color="#9C27B0"
@@ -12,9 +12,9 @@
       </v-row>
     </v-container>
     <div v-else>
-      <Navigation :drawer="drawer" />
-      <v-app-bar app clipped-left color="purple">
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <Navigation />
+      <v-app-bar app clipped-left class="nav_bar">
+        <v-app-bar-nav-icon class="nav_icon" @click.stop="changeDrawer()" />
         <v-toolbar-title>
           <v-btn class="appName" text @click="$router.push('/')"
             >BookSharing</v-btn
@@ -27,11 +27,7 @@
           class="mx-auto"
           type="button"
         >
-          <div
-            style="height:auto"
-            v-if="userData.name === undefined"
-            class="mx-auto"
-          >
+          <div v-if="userData.name === undefined" class="mx-auto button_block">
             <Register />
             <Login @login="login" />
           </div>
@@ -47,31 +43,25 @@
 </template>
 
 <script>
-/*eslint-disable*/
 import { AtomSpinner } from "epic-spinners";
-import Login from "@/components/Main/Login";
-import Register from "@/components/Main/Register";
-import UserInfo from "@/components/Main/UserInfo";
-import Navigation from "@/components/Main/Navigation";
 
 export default {
   name: "App",
   components: {
-    Register,
-    Login,
-    UserInfo,
-    Navigation,
+    Register: () => import("@/components/Main/Register"),
+    Login: () => import("@/components/Main/Login"),
+    UserInfo: () => import("@/components/Main/UserInfo"),
+    Navigation: () => import("@/components/Main/Navigation"),
     AtomSpinner
   },
   data() {
     return {
+      nav: false,
       load: true,
       loading: true,
-      drawer: false,
       userData: undefined
     };
   },
-  /*eslint-disable */
   async created() {
     this.$vuetify.theme.dark = true;
     try {
@@ -88,6 +78,10 @@ export default {
   methods: {
     login(user_data) {
       this.userData = user_data;
+    },
+    changeDrawer() {
+      this.nav = !this.nav;
+      this.$store.dispatch("changeDrawer", this.nav);
     }
   },
   mounted() {
@@ -95,18 +89,32 @@ export default {
       this.loading = loading;
     });
   }
-  /*eslint-enable */
 };
 </script>
 
-<style scoped>
-@media screen and (max-width: 605px) {
-  .appName {
-    display: none;
-  }
+<style scoped lang="scss">
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
+* {
+  font-family: "Open Sans", sans-serif;
 }
 .row {
-  padding: 0;
-  margin: 0;
+  @include reset-padding-margin;
+}
+.nav_bar {
+  background-color: $main-color !important;
+  .nav_icon {
+    margin-left: -0.4em !important;
+  }
+  .appName {
+    @media screen and (max-width: 605px) {
+      display: none;
+    }
+  }
+  .button_block {
+    height: auto;
+    display: flex;
+  }
 }
 </style>

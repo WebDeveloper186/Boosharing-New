@@ -7,10 +7,10 @@
       </v-btn>
     </template>
 
-    <v-card>
+    <v-card class="user_card">
       <v-card-title>
-        <v-list>
-          <v-list-item class="menu_user">
+        <v-list class="transparent">
+          <v-list-item>
             <v-list-item-avatar>
               <img
                 src="https://pbs.twimg.com/profile_images/1986569304/image_400x400.jpg"
@@ -65,5 +65,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/styles/_variables.scss";
+
+.user_card {
+  border-radius: 15px !important;
+  background: $gradient-first;
+  background: $user-card-gradient;
+  .transparent {
+    background: inherit;
+  }
+}
 </style>

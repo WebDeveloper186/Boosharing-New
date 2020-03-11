@@ -24,6 +24,7 @@
                   :counter="16"
                   label="Имя"
                   required
+                  aria-autocomplete="off"
                   @input="$v.name.$touch()"
                   @blur="$v.name.$touch()"
                 ></v-text-field>
@@ -34,6 +35,7 @@
                   :error-messages="emailErrors"
                   label="E-mail"
                   required
+                  aria-autocomplete="off"
                   @input="$v.email.$touch()"
                   @blur="$v.email.$touch()"
                 ></v-text-field>
@@ -54,6 +56,7 @@
                   :error-messages="passwordErrors"
                   label="Пароль"
                   required
+                  aria-autocomplete="off"
                   @input="$v.password.$touch()"
                   @blur="$v.password.$touch()"
                 ></v-text-field>
@@ -67,7 +70,7 @@
         <v-spacer></v-spacer>
 
         <v-btn text @click="cancel">Отмена</v-btn>
-        <v-btn color="primary" text @click="signIn">Зарегистрироваться</v-btn>
+        <v-btn class="reg_btn" text @click="signIn">Зарегистрироваться</v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>
@@ -162,23 +165,36 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/styles/_mixins.scss";
+@import "@/styles/_variables.scss";
+
+.reg {
+  &::after {
+    content: "Регистрация";
+  }
+  @media screen and (max-width: 458px) {
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+    &::after {
+      content: "";
+    }
+  }
+}
 .phone {
   border-bottom: 1px solid;
   width: 100%;
-  color: lightgray;
+  color: $reg-phone;
   height: 2.25em;
-}
-.reg::after {
-  content: "Регистрация";
-}
-@media screen and (max-width: 458px) {
-  .reg {
-    margin-left: -15px !important;
-    margin-right: -15px !important;
+  &::placeholder {
+    color: lightgrey;
   }
-  .reg::after {
-    content: "";
+  &:focus {
+    outline: none;
+    border-bottom: 0.1em solid $second-color;
   }
+}
+.reg_btn {
+  color: $second-color;
 }
 </style>
